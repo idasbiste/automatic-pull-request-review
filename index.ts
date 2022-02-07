@@ -23,7 +23,7 @@ if (!pullRequest?.number) {
   const pattern = /aws-java-sdk-s3 from (\d+)\.(\d+)\.\d+ to \1\.\2\.\d+/;
   octokit.pulls.get({ owner: "patientsknowbest", repo: "phr", pull_number: pullRequest?.number })
     .then(pull => {
-      if (pull.data.user?.login === "dependabot[bot]" && pattern.test(pull.data.title)) {
+      if (!(pull.data.user?.login === "dependabot[bot]" && pattern.test(pull.data.title))) {
         const query = `
         mutation {
           addPullRequestReview(input: {
