@@ -1,7 +1,7 @@
 import * as core from '@actions/core';
 import * as github from '@actions/github';
 
-const token = core.getInput('repo-token') || "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";
+const token = core.getInput('repo-token');
 const requestEvent = core.getInput('event');
 const body = core.getInput('body');
 
@@ -23,7 +23,7 @@ if (!pullRequest?.number) {
   const pattern = /aws-java-sdk-s3 from (\d+)\.(\d+)\.\d+ to \1\.\2\.\d+/;
   octokit.pulls.get({ owner: "patientsknowbest", repo: "phr", pull_number: pullRequest?.number })
     .then(pull => {
-      if (pull.data.user?.login === "dependabot[bot]" && pattern.test(pull.data.title)) {
+      if (pattern.test(pull.data.title)) {
         const query = `
         mutation {
           addPullRequestReview(input: {
